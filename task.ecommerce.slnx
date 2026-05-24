@@ -1,0 +1,23 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU" />
+    </Configurations>
+    <Folder Name="/src/">
+        <Project Path="src/task.ecommerce.Domain/task.ecommerce.Domain.csproj" />
+        <Project Path="src/task.ecommerce.Application/task.ecommerce.Application.csproj" />
+        <Project Path="src/task.ecommerce.EntityFrameworkCore/task.ecommerce.EntityFrameworkCore.csproj" />
+        <Project Path="src/task.ecommerce.Domain.Shared/task.ecommerce.Domain.Shared.csproj" />
+        <Project Path="src/task.ecommerce.Application.Contracts/task.ecommerce.Application.Contracts.csproj" />
+        <Project Path="src/task.ecommerce.HttpApi/task.ecommerce.HttpApi.csproj" />
+        <Project Path="src/task.ecommerce.HttpApi.Client/task.ecommerce.HttpApi.Client.csproj" />
+        <Project Path="src/task.ecommerce.HttpApi.Host/task.ecommerce.HttpApi.Host.csproj" />
+        <Project Path="src/task.ecommerce.DbMigrator/task.ecommerce.DbMigrator.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/task.ecommerce.Application.Tests/task.ecommerce.Application.Tests.csproj" />
+        <Project Path="test/task.ecommerce.EntityFrameworkCore.Tests/task.ecommerce.EntityFrameworkCore.Tests.csproj" />
+        <Project Path="test/task.ecommerce.TestBase/task.ecommerce.TestBase.csproj" />
+        <Project Path="test/task.ecommerce.Domain.Tests/task.ecommerce.Domain.Tests.csproj" />
+        <Project Path="test/task.ecommerce.HttpApi.Client.ConsoleTestApp/task.ecommerce.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+</Solution>
