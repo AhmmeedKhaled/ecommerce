@@ -65,7 +65,7 @@ public class OrderAppService : ApplicationService
         return list.Select(x => x.ToDto()).ToList();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<List<OrderDto>> GetAllAsync()
     {
         var list = await _orderRepository.GetListAsync();

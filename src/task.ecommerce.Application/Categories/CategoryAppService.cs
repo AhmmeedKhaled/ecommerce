@@ -46,7 +46,7 @@ public class CategoryAppService : ApplicationService, ICategoryAppService
         return category.ToDto();
     }
 
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public async Task<CategoryDto> UpdateAsync(Guid id, CreateUpdateCategoryDto input)
     {
         var category = await _categoryRepository.GetAsync(id);
@@ -59,7 +59,7 @@ public class CategoryAppService : ApplicationService, ICategoryAppService
         return category.ToDto();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task DeleteAsync(Guid id)
     {
         await _categoryRepository.DeleteAsync(id);
