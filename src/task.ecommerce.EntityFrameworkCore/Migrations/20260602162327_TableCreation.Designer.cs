@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using task.ecommerce.EntityFrameworkCore;
 namespace task.ecommerce.Migrations
 {
     [DbContext(typeof(ecommerceDbContext))]
-    partial class ecommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260602162327_TableCreation")]
+    partial class TableCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2140,9 +2143,6 @@ namespace task.ecommerce.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("CreatorId");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("EnglishDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -2388,12 +2388,10 @@ namespace task.ecommerce.Migrations
 
             modelBuilder.Entity("task.ecommerce.Categories.Category", b =>
                 {
-                    b.HasOne("task.ecommerce.Categories.Category", "ParentCategory")
-                        .WithMany("Children")
+                    b.HasOne("task.ecommerce.Categories.Category", null)
+                        .WithMany()
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("task.ecommerce.Orders.OrderItem", b =>
@@ -2407,13 +2405,11 @@ namespace task.ecommerce.Migrations
 
             modelBuilder.Entity("task.ecommerce.Products.Product", b =>
                 {
-                    b.HasOne("task.ecommerce.Categories.Category", "Category")
+                    b.HasOne("task.ecommerce.Categories.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2458,11 +2454,6 @@ namespace task.ecommerce.Migrations
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
                 {
                     b.Navigation("ConnectionStrings");
-                });
-
-            modelBuilder.Entity("task.ecommerce.Categories.Category", b =>
-                {
-                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("task.ecommerce.Orders.Order", b =>

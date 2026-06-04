@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using task.ecommerce.EntityFrameworkCore;
 namespace task.ecommerce.Migrations
 {
     [DbContext(typeof(ecommerceDbContext))]
-    partial class ecommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260604082806_FixConflictPKey")]
+    partial class FixConflictPKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2125,6 +2128,9 @@ namespace task.ecommerce.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CategoryId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
@@ -2175,6 +2181,8 @@ namespace task.ecommerce.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
 
                     b.ToTable("AppProducts", (string)null);
                 });
@@ -2407,10 +2415,16 @@ namespace task.ecommerce.Migrations
 
             modelBuilder.Entity("task.ecommerce.Products.Product", b =>
                 {
-                    b.HasOne("task.ecommerce.Categories.Category", "Category")
+                    b.HasOne("task.ecommerce.Categories.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("task.ecommerce.Categories.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");

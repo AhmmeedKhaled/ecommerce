@@ -68,6 +68,8 @@ public class ecommerceHttpApiHostModule : AbpModule
                 options.AddAudiences("ecommerce");
                 options.UseLocalServer();
                 options.UseAspNetCore();
+
+                options.SetIssuer(configuration["AuthServer:Authority"]);
             });
         });
 

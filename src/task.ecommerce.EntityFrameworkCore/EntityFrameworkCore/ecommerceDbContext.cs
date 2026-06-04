@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using task.ecommerce.Categories;
+using task.ecommerce.Orders;
+using task.ecommerce.Products;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -9,9 +12,9 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
@@ -78,7 +81,93 @@ public class ecommerceDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
-        
+
+        builder.Entity<Category>(b =>
+        {
+            b.ToTable("AppCategories");
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.ArabicName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            b.Property(x => x.EnglishName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            b.HasOne(x => x.ParentCategory)
+                .WithMany(x => x.Children)
+                .HasForeignKey(x => x.ParentCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<Product>(b =>
+        {
+            b.ToTable("AppProducts");
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.ArabicName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            b.Property(x => x.EnglishName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            b.Property(x => x.ArabicDescription)
+                .HasMaxLength(1000);
+
+            b.Property(x => x.EnglishDescription)
+                .HasMaxLength(1000);
+
+            b.Property(x => x.Price)
+                .HasColumnType("decimal(18,2)");
+
+            b.Property(x => x.StockQuantity)
+                .IsRequired();
+
+            b.HasOne(x => x.Category)
+                .WithMany()
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<Order>(b =>
+        {
+            b.ToTable("AppOrders");
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.TotalPrice)
+                .HasColumnType("decimal(18,2)");
+
+            b.HasMany(x => x.Items)
+                .WithOne()
+                .HasForeignKey(x => x.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<OrderItem>(b =>
+        {
+            b.ToTable("AppOrderItems");
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Quantity)
+                .IsRequired();
+
+            b.Property(x => x.UnitPrice)
+                .HasColumnType("decimal(18,2)");
+
+            b.Property(x => x.OrderId)
+                .IsRequired();
+
+            b.Property(x => x.ProductId)
+                .IsRequired();
+        });
+
         /* Configure your own tables/entities inside here */
 
         //builder.Entity<YourEntity>(b =>
@@ -88,4 +177,8 @@ public class ecommerceDbContext :
         //    //...
         //});
     }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 }
